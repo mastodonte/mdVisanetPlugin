@@ -1,0 +1,7 @@
+process-test-response:
+  url:   /visatest/response
+  param: { module: visatest, action: process }
+  
+process-response:
+  url:   /visanet/response
+  param: { module: visanet, action: process }  

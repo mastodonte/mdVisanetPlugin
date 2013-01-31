@@ -1,0 +1,35 @@
+all:
+  visanet:
+    # TESTING:    000002044018980
+    # PRODUCCION: 000002044018980
+    CODIGO_COMERCIO: 000002044018980
+
+    # TESTING: 5808
+    # PRODUCCION: 4036
+    # Código Tienda del Plugin
+    IDCOMMERCE: 5808
+
+    # Código Tienda del Plugin
+    CODIGO_TERMINAL: VBV00203
+
+    # TESTING: 16
+    # PRODUCCION: 4
+    # ID Adquirente ó Código Adquirente en el Plugin
+    IDACQUIRER: 16
+
+    # Es el URL donde debe invocar el comercio para enviar los parámetros de la solicitud de pago al V-POS.
+    # TESTING: https://test2.alignetsac.com/VPOS/MM/transactionStart20.do
+    # PRODUCCION: https://vpayment.verifika.com/VPOS/MM/transactionStart20.do
+    URL: https://test2.alignetsac.com/VPOS/MM/transactionStart20.do
+
+    # Código de 16 caracteres hexadecimales (elegido por el comercio)
+    VECTOR: 9E8B51CA41AA2FBD
+            
+    # Administrador Web del Sistema de Autorización  
+    # TESTING V-Payment: https://test2.alignetsac.com/vpaymentweb/
+    # PRODUCCION V-Payment:  https://vpayment.verifika.com/vpaymentweb/
+    ADMIN: https://test2.alignetsac.com/vpaymentweb/
+      
+    CURRENCY_CODE: 840  
+      
+    DEBUG: false

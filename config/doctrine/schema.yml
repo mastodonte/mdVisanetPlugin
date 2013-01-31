@@ -1,0 +1,58 @@
+mdVisa:
+  actAs:
+    Timestampable: ~ 
+  columns:
+    id:
+      type: integer(4)
+      primary: true
+      autoincrement: true
+    status:
+      type: enum
+      values: [ pending, canceled, rejected, payed ]
+    authorizationResult:
+      type: string(2)
+      notnull: true
+    authorizationCod:
+      type: string(6)
+      notnull: true
+    errorCode:
+      type: string(4)
+      notnull: true
+    errorMessage:
+      type: string(256)
+      notnull: true
+    planCode:
+      type: integer(2)
+      #num (4)
+    planName: 
+      type: string(30)
+    quotaCode: 
+      type: integer(2)
+      #num (4)
+    quotaName: 
+      type: string(30)
+    cardType: 
+      type: string(4)
+    cardNumber:
+      type: integer(4)
+      #num 19
+    ECI:
+      type: integer(1)
+      #num 2
+    VCI: 
+      type: string(4)
+    security_key:
+      type: string(128)
+      notnull: true
+    md_order_id:
+      type: integer(4)
+      notnull: true
+  relations:
+    mdOrder:
+      local: md_order_id
+      foreign: id
+      onDelete: CASCADE
+      type: one
+
+
+
