@@ -57,11 +57,11 @@ class visatestActions extends sfActions
     //notese el \n son los agregados al final de cada linea, son saltos de linea necesarios para el formato PEM
 
     // Esta llave pública es generada por ALIGNET
-    $this->llavePublicaCifrado = file_get_contents(sfConfig::get('sf_data_dir') . '/visa/ALIGNET.TESTING.PHP.CRYPTO.PUBLIC.txt');
+    $this->llavePublicaCifrado = file_get_contents(sfConfig::get('sf_data_dir') . '/visa/' . sfConfig::get('app_visanet_ENVIRONMENT') . '/ALIGNET.TESTING.PHP.CRYPTO.PUBLIC.txt');
 
     // Llave privada del comercio con la que se generará la firma digital del mensaje XMLREQ.
     // Esta llave privada es generada y almacenada por el comercio.
-    $this->llavePrivadaFirma = file_get_contents(sfConfig::get('sf_data_dir') . '/superventas/SUPERVENTAS.FIRMA.PRIVADA.pem');
+    $this->llavePrivadaFirma = file_get_contents(sfConfig::get('sf_data_dir') . '/superventas/' . sfConfig::get('app_visanet_ENVIRONMENT') . '/SUPERVENTAS.FIRMA.PRIVADA.pem');
   }  
   
   public function executePhpinfo(sfWebRequest $request) 
@@ -99,8 +99,8 @@ class visatestActions extends sfActions
       try {
         $this->error = false;
         
-        $llavePrivadaCifrado = file_get_contents(sfConfig::get('sf_data_dir') . '/superventas/SUPERVENTAS.CIFRADO.PRIVADA.pem');    
-        $llavePublicaFirma = file_get_contents(sfConfig::get('sf_data_dir') . '/visa/ALIGNET.TESTING.PHP.SIGNATURE.PUBLIC.txt');
+        $llavePrivadaCifrado = file_get_contents(sfConfig::get('sf_data_dir') . '/superventas/' . sfConfig::get('app_visanet_ENVIRONMENT') . '/SUPERVENTAS.CIFRADO.PRIVADA.pem');    
+        $llavePublicaFirma = file_get_contents(sfConfig::get('sf_data_dir') . '/visa/' . sfConfig::get('app_visanet_ENVIRONMENT') . '/ALIGNET.TESTING.PHP.SIGNATURE.PUBLIC.txt');
         $VI = sfConfig::get('app_visanet_VECTOR');
 
         $arrayIn = array();
@@ -116,11 +116,18 @@ class visatestActions extends sfActions
           $this->md_visa = visanetController::getInstance()->process($arrayOut);
           $this->md_order = $this->md_visa->getMdOrder();
           $this->data = $arrayOut;
+          
+          if( $arrayOut['authorizationResult'] != visanetController::AUTHORIZED_CODE){
+            $this->getUser()->setFlash('error', 'Transaccion Cancelada!');
+            $this->redirect('@homepage');
+          }          
 
         } else {
           //Puede haber un problema de mala configuración de las llaves, vector de inicializacion o el VPOS no ha enviado valores correctos
           $this->error = 'VISANET RESPONSE ERROR';
           $this->data = $arrayOut;
+          $this->getUser()->setFlash('error', 'Error: Ha habido un problema al procesar la respuesta de VISANET y la transaccion no se ha podido realizar. Intente nuevamente!');
+          $this->redirect('@homepage');
         }
 
       } catch (Exception $e) {
@@ -156,8 +163,8 @@ class visatestActions extends sfActions
     "pIs4aIDXarTYJGWlyQIDAQAB\n".
     "-----END PUBLIC KEY-----";*/
 
-    /*$llavePrivadaCifrado = file_get_contents(sfConfig::get('sf_data_dir') . '/superventas/SUPERVENTAS.CIFRADO.PRIVADA.pem');    
-    $llavePublicaFirma = file_get_contents(sfConfig::get('sf_data_dir') . '/visa/ALIGNET.TESTING.PHP.SIGNATURE.PUBLIC.txt');
+    /*$llavePrivadaCifrado = file_get_contents(sfConfig::get('sf_data_dir') . '/superventas/' . sfConfig::get('app_visanet_ENVIRONMENT') . '/SUPERVENTAS.CIFRADO.PRIVADA.pem');    
+    $llavePublicaFirma = file_get_contents(sfConfig::get('sf_data_dir') . '/visa/' . sfConfig::get('app_visanet_ENVIRONMENT') . '/ALIGNET.TESTING.PHP.SIGNATURE.PUBLIC.txt');
 
     $arrayIn = array();
     $arrayIn['IDACQUIRER'] = $request->getParameter('IDACQUIRER');

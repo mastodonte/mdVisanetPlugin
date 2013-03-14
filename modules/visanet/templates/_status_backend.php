@@ -17,6 +17,10 @@
  
        <?php if($register->getStatus() == mdVisa::PAYED): ?>
           <tr>
+            <td><label>Plan:</label></td>
+            <td><?php echo $register->getPlanName(); ?></td>
+          </tr>        
+          <tr>
             <td><label># Cuotas:</label></td>
             <td><?php echo $register->getQuotaCode(); ?></td>
           </tr>
